@@ -1,27 +1,32 @@
 # coding: utf-8
 # come from dw
+import datetime
+import json
+import os
+import time
+
 import numpy
 import pandas as pd
+from flask import Flask, Response, g, jsonify, make_response, request
+from flask_cors import CORS
 from pandas_datareader import data, wb
-from flask import Flask, Response, request, make_response, jsonify, g
-import datetime, time
-import json
-from flask_cors import *
-import os
 
 app = Flask(__name__)
 CORS(app, supports_credentials=True)
 
+
 def stringToDate(string):
-    #example '2013-07-22 09:44:15+00:00'
+    # example '2013-07-22 09:44:15+00:00'
     dt = datetime.datetime.strptime(string, "%Y-%m-%d")
-    #print dt
+    # print dt
     return dt
 
 
 @app.route('/marks')
 def marks():
     df_news = pd.read_csv('amazon_news.csv')
+    # 在date列去重
+    df_news = df_news.drop_duplicates('date')
     try:
         df_news.drop('Unnamed: 0', inplace=True, axis=1)
     except ValueError:
@@ -36,7 +41,7 @@ def marks():
     minSize = [7] * df_news.shape[0]
 
     response = make_response(jsonify(id=ids, time=dates, color=colors, text=texts,
-                             label=labels, labelFontColor=labelFontColor, minSize=minSize))
+                                     label=labels, labelFontColor=labelFontColor, minSize=minSize))
 
     return response
 
@@ -74,7 +79,7 @@ def get_history():
     print(df.index[0])
     print(df.head(1))
 
-    date = list(map(lambda s: s.value // 10**9, df.index))
+    date = list(map(lambda s: s.value // 10 ** 9, df.index))
     date.reverse()
 
     open = df['Open'].tolist()
@@ -89,11 +94,12 @@ def get_history():
     volume = df['Volume'].tolist()
     volume.reverse()
 
-    response = make_response(jsonify(t=date, o=open,h=high, l=low, c=close, v=volume, s=status))
+    response = make_response(jsonify(t=date, o=open, h=high, l=low, c=close, v=volume, s=status))
     response.headers['Access-Control-Allow-Origin'] = '*'
     response.headers['Access-Control-Allow-Methods'] = 'POST, GET'
     response.headers['Access-Control-Allow-Headers'] = 'x-requested-with,content-type'
     return response
+
 
 @app.route('/config')
 def config():
@@ -103,6 +109,7 @@ def config():
         print(jsdata)
 
     return jsdata
+
 
 @app.route('/symbols')
 def symbols():
@@ -114,9 +121,8 @@ def symbols():
     return jsdata
 
 
-
 if __name__ == '__main__':
     app.run(
-        host='0.0.0.0'
+        host='0.0.0.0',
+        port=8080
     )
-

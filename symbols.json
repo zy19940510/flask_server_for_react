@@ -1,5 +1,5 @@
 {
-    "name": "AAPL",
+    "name": "AMZN",
     "exchange-traded": "NasdaqNM",
     "exchange-listed": "NasdaqNM",
     "timezone": "America/New_York",
@@ -9,7 +9,7 @@
     "session": "0930-1630",
     "has_intraday": false,
     "has_no_volume": false,
-    "description": "Apple Inc.",
+    "description": "Amazon.com Inc.",
     "type": "stock",
     "supported_resolutions": [
         "D",
@@ -21,5 +21,5 @@
         "6M"
     ],
     "pricescale": 100,
-    "ticker": "AAPL"
+    "ticker": "AMZN"
 }
