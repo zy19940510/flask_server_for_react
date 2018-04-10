@@ -26,7 +26,7 @@ def stringToDate(string):
 def marks():
     df_news = pd.read_csv('amazon_news.csv')
     # 在date列去重
-    df_news = df_news.drop_duplicates('date')
+    # df_news = df_news.drop_duplicates('date')
     try:
         df_news.drop('Unnamed: 0', inplace=True, axis=1)
     except ValueError:
@@ -54,13 +54,13 @@ def get_history():
         symbol = sym
     f = '2015-1-1'
     t = '2018-1-1'
-    uf = int(time.mktime(stringToDate(f).timetuple()))
-    ut = int(time.mktime(stringToDate(t).timetuple()))
+    _uf = int(time.mktime(stringToDate(f).timetuple()))
+    _ut = int(time.mktime(stringToDate(t).timetuple()))
     af = request.args.get('from')
     at = request.args.get('to')
     if af and at:
-        uf = af
-        ut = at
+        _uf = af
+        _ut = at
 
     if os.path.exists('./data.csv'):
         df = pd.read_csv('data.csv')
